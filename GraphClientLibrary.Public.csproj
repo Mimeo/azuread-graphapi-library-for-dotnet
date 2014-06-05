@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EF520454-D494-47D0-A552-59E17CA99DAA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Azure.ActiveDirectory.GraphClient</RootNamespace>
+    <AssemblyName>Microsoft.Azure.ActiveDirectory.GraphClient</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="DirectoryObjects\AadJsonConverter.cs" />
+    <Compile Include="DirectoryObjects\Actions.cs" />
+    <Compile Include="DirectoryObjects\GraphMethodAttribute.cs" />
+    <Compile Include="DirectoryObjects\GraphObject.cs" />
+    <Compile Include="DirectoryObjects\GraphConnection.cs" />
+    <Compile Include="DirectoryObjects\BatchRequestItem.cs" />
+    <Compile Include="DirectoryObjects\BatchResponseItem.cs" />
+    <Compile Include="DirectoryObjects\ChangeTrackingCollection.cs" />
+    <Compile Include="DirectoryObjects\ConnectionWrapper.cs" />
+    <Compile Include="DirectoryObjects\GraphProperty.cs" />
+    <Compile Include="DirectoryObjects\GeneratedClasses.cs" />
+    <Compile Include="DirectoryObjects\GraphSettings.cs" />
+    <Compile Include="DirectoryObjects\Helpers\KeyCredentialsHelper.cs" />
+    <Compile Include="DirectoryObjects\Helpers\KeyType.cs" />
+    <Compile Include="DirectoryObjects\Helpers\KeyUsage.cs" />
+    <Compile Include="DirectoryObjects\HttpVerb.cs" />
+    <Compile Include="DirectoryObjects\User.cs" />
+    <Compile Include="DirectoryObjects\Group.cs" />
+    <Compile Include="DirectoryObjects\EntityAttribute.cs" />
+    <Compile Include="DirectoryObjects\LinkAttribute.cs" />
+    <Compile Include="DirectoryObjects\LinkNameMap.cs" />
+    <Compile Include="DirectoryObjects\LinkProperty.cs" />
+    <Compile Include="DirectoryObjects\PagedResults.cs" />
+    <Compile Include="DirectoryObjects\PropertyNameMap.cs" />
+    <Compile Include="DirectoryObjects\SerializationHelper.cs" />
+    <Compile Include="ErrorHandling\AuthenticationException.cs" />
+    <Compile Include="ErrorHandling\AuthorizationException.cs" />
+    <Compile Include="ErrorHandling\BadRequestException.cs" />
+    <Compile Include="ErrorHandling\DuplicateObjectException.cs" />
+    <Compile Include="ErrorHandling\ErrorCodes.cs" />
+    <Compile Include="ErrorHandling\ErrorResolver.cs" />
+    <Compile Include="ErrorHandling\ExpiredTokenException.cs" />
+    <Compile Include="ErrorHandling\ExtendedErrorValue.cs" />
+    <Compile Include="ErrorHandling\GraphException.cs" />
+    <Compile Include="ErrorHandling\InvalidApiVersionException.cs" />
+    <Compile Include="ErrorHandling\InvalidHeaderException.cs" />
+    <Compile Include="ErrorHandling\InternalServerErrorException.cs" />
+    <Compile Include="ErrorHandling\ObjectNotFoundException.cs" />
+    <Compile Include="ErrorHandling\ODataError.cs" />
+    <Compile Include="ErrorHandling\ODataErrorCodeMessage.cs" />
+    <Compile Include="ErrorHandling\ODataErrorMessage.cs" />
+    <Compile Include="ErrorHandling\PageNotAvailableException.cs" />
+    <Compile Include="ErrorHandling\PropertyValidationException.cs" />
+    <Compile Include="ErrorHandling\QuotaExceededException.cs" />
+    <Compile Include="ErrorHandling\RequestThrottledException.cs" />
+    <Compile Include="ErrorHandling\ServiceUnavailableException.cs" />
+    <Compile Include="ErrorHandling\UnsupportedQueryException.cs" />
+    <Compile Include="Filters\ExpressionHelper.cs" />
+    <Compile Include="Filters\FilterGenerator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\ILogger.cs" />
+    <Compile Include="Tools\Logger.cs" />
+    <Compile Include="Tools\Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
