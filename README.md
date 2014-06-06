@@ -1,6 +1,6 @@
 azuread-graphapi-library-for-dotnet
 ===================================
-Microsoft Azure Active Directory Graph API Version 1.0 library sources. Anyone who would like to add their contributions to this library, please do this using the DEV branch (not the Master).
+Microsoft Azure Active Directory Graph API Version 1.0 library sources. We encourage Developers to add their contributions to this library - please do this using the DEV branch (not the Master).
 
 This library is recommended for any dev projects that will call the Microsoft Azure Active Directory Graph API. 
 
