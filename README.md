@@ -13,7 +13,7 @@ https://github.com/AzureADSamples/ConsoleApp-GraphAPI-DotNet
 2. MVC Web App that calls Graph API, using OpenID connect and OWIN libraries
 https://github.com/AzureADSamples/WebApp-GraphAPI-DotNet
 
-We welcome all feedback and questions. We also welcome fixes, enhancements - please make contributions using the Dev branch of this library.  
+We welcome all feedback and questions.
 
 Thank you, from the Microsoft Azure AD Graph team.
 
