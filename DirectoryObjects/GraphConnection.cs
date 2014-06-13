@@ -274,6 +274,27 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
         }
 
         /// <summary>
+        /// Gets the application with the given appId.
+        /// </summary>
+        /// <param name="appId">The value of the appId property on the desired application.</param>
+        /// <returns>The application with the given appId.</returns>
+        /// <remarks>This is a convenience method. If you already know the objectId of your app, you can
+        /// retrieve it by calling Get<Application>(objectId). </Application></remarks>
+        public virtual Application GetApplication(string appId)
+        {
+            var query = String.Format(CultureInfo.InvariantCulture, "appId eq guid'{0}'", appId);
+            var filter = new FilterGenerator { OverrideQueryFilter = query };
+            var pagedResults = this.List<Application>(null, filter);
+
+            if (pagedResults.Results == null || pagedResults.Results.Count != 1)
+            {
+                throw new ObjectNotFoundException(HttpStatusCode.NotFound, "Application not found.");
+            }
+
+            return pagedResults.Results[0];
+        }
+
+        /// <summary>
         /// Get a single object
         /// </summary>
         /// <typeparam name="T">Type of object to be searched for.</typeparam>

@@ -54,6 +54,15 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DirectoryObjects\AadJsonConverter.cs" />
     <Compile Include="DirectoryObjects\Actions.cs" />
+    <Compile Include="DirectoryObjects\ChangeTrackingFiniteSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DirectoryObjects\ExtendedGraphObjects.cs" />
+    <Compile Include="DirectoryObjects\ExtensionProperty.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DirectoryObjects\ExtensionPropertyAttribute.cs" />
+    <Compile Include="DirectoryObjects\ExtensionsHostInfo.cs" />
     <Compile Include="DirectoryObjects\GraphMethodAttribute.cs" />
     <Compile Include="DirectoryObjects\GraphObject.cs" />
     <Compile Include="DirectoryObjects\GraphConnection.cs" />

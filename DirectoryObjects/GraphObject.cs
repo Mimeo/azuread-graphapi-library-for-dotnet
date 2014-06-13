@@ -141,5 +141,49 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
 
             return JsonConvert.SerializeObject(this);
         }
+
+        #region Extension properties support
+
+        protected internal object ExtensionsHost { get; set; }
+
+        private static IDictionary<Type, ExtensionsHostInfo> registeredExtensionsHostInfoMap = new Dictionary<Type, ExtensionsHostInfo>();
+
+        public static ExtensionsHostInfo GetExtensionsHostInfo(Type graphObjectType)
+        {
+            ExtensionsHostInfo result = null;
+            GraphObject.registeredExtensionsHostInfoMap.TryGetValue(graphObjectType, out result);
+            return result;
+        }
+
+        public static void RegisterExtensions<TGraphObject, TExtensionsHost>()
+            where TGraphObject : GraphObject
+            where TExtensionsHost : class, new()
+        {
+            if (GraphObject.registeredExtensionsHostInfoMap.ContainsKey(typeof(TGraphObject)))
+            {
+                throw new InvalidOperationException();
+            }
+
+            GraphObject.registeredExtensionsHostInfoMap[typeof(TGraphObject)] = 
+                new ExtensionsHostInfo(typeof(TExtensionsHost));
+        }
+
+        public static void UnregisterExtensions<TGraphObject>()
+            where TGraphObject : GraphObject
+        {
+            GraphObject.registeredExtensionsHostInfoMap.Remove(typeof(TGraphObject));
+        }
+
+        public object GetExtensionProperty(PropertyInfo info)
+        {
+            return info.GetValue(this.ExtensionsHost, null);
+        }
+
+        public void SetExtensionProperty(PropertyInfo info, object value)
+        {
+            info.SetValue(this.ExtensionsHost, value, null);
+        }
+
+        #endregion
     }
 }

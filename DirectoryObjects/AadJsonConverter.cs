@@ -129,17 +129,36 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
                 Dictionary<string, PropertyInfo> propertyNameToInfoMap =
                     this.GetPropertyInfosForAadType(odataTypeProperty.Value.ToString(), resultObjectType);
 
+                var extensionsHostInfo = GraphObject.GetExtensionsHostInfo(resultObjectType);
+
+                if (extensionsHostInfo != null)
+                {
+                    graphObject.ExtensionsHost = Activator.CreateInstance(extensionsHostInfo.ExtensionsHostType);
+                }
+
                 foreach (JProperty jsonProperty in jsonProperties)
                 {
                     PropertyInfo propertyInfo;
                     if (!propertyNameToInfoMap.TryGetValue(jsonProperty.Name, out propertyInfo))
                     {
-                        graphObject.NonSerializedProperties[jsonProperty.Name] = jsonProperty.Value.ToString();
+                        if (extensionsHostInfo != null && IsExtensionProperty(jsonProperty.Name))
+                        {
+
+                        }
+                        else
+                        {
+                            graphObject.NonSerializedProperties[jsonProperty.Name] = jsonProperty.Value.ToString();
+                        }
                     }
                 }
             }
 
             return graphObject;
+        }
+
+        private bool IsExtensionProperty(string name)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(name, "extension_[a-f0-9]+_[a-z][a-z0-9]+");
         }
 
         /// <summary>

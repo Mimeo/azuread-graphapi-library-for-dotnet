@@ -85,5 +85,10 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
         /// Property registeredUsers
         /// </summary>
         RegisteredUsers = 13,
+
+        /// <summary>
+        /// Property extensionProperties
+        /// </summary>
+        ExtensionProperties = 14,
     }
 }

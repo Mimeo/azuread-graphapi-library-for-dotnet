@@ -36,6 +36,7 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
                 { "registeredDevices" },
                 { "registeredOwners" },
                 { "registeredUsers" },
+                { "extensionProperties" },
             };
     }
 }
