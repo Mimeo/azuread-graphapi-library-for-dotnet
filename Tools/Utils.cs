@@ -681,7 +681,7 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
         {
             Utils.ThrowIfNull(sourceType, "sourceType");
 
-            object[] customAttributes = sourceType.GetCustomAttributes(typeof(T), true);
+            object[] customAttributes = sourceType.GetCustomAttributes(typeof(T), false);
 
             if (customAttributes == null || customAttributes.Length != 1)
             {

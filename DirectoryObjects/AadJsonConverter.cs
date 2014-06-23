@@ -22,6 +22,7 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using Newtonsoft.Json;
@@ -63,7 +64,8 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
                 case JTokenType.Bytes:
                     return property.Value.ToObject<Byte[]>();
                 default:
-                    throw new InvalidOperationException("");
+                    throw new InvalidOperationException(
+                        String.Format(CultureInfo.InvariantCulture, "Cannot convert property value to {0}.", property.Value.Type));
             }
         }
 

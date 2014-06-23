@@ -118,10 +118,9 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
             }
             set
             {
-                // The domain of the new value must be a subset of the domain of valid target object types.
                 if (value.Domain.Any(item => ExtensionProperty.validTargetObjectTypes.Contains(item) == false))
                 {
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("Value must contain a subset of the domain of valid target object types.");
                 }
                 this._targetObjects = value;
                 this.ChangedProperties.Add("TargetObjects");
