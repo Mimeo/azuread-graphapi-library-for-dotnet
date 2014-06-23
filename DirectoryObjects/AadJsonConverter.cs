@@ -55,14 +55,20 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
             return isGraphObject;
         }
 
+        /// <summary>
+        /// Converts the value of the given property to its corresponding CLR value.
+        /// </summary>
+        /// <param name="property">A JSON property.</param>
+        /// <returns>A CLR value.</returns>
         private object ConvertPropertyValue(JProperty property)
         {
+            // The casts below are explicitly implemented by the Newtonsoft.Json library.
             switch (property.Value.Type)
             {
                 case JTokenType.String:
-                    return property.Value.ToObject<String>();
+                    return (String)property.Value;
                 case JTokenType.Bytes:
-                    return property.Value.ToObject<Byte[]>();
+                    return (Byte[])property.Value;
                 default:
                     throw new InvalidOperationException(
                         String.Format(CultureInfo.InvariantCulture, "Cannot convert property value to {0}.", property.Value.Type));

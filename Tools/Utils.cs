@@ -70,11 +70,22 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
             return serializableGraphObject;
         }
 
+        /// <summary>
+        /// Determines whether the given name is an extension property name.
+        /// </summary>
+        /// <param name="name">The candidate name.</param>
+        /// <returns>True if the given name matches the pattern for extension property names; false otherwise.</returns>
         public static bool IsExtensionPropertyName(string name)
         {
             return System.Text.RegularExpressions.Regex.IsMatch(name, "extension_[a-f0-9]+_[\\w]+");
         }
 
+        /// <summary>
+        /// Builds the full name of an extension property.
+        /// </summary>
+        /// <param name="appId">The application identifier component of the full name.</param>
+        /// <param name="friendlyName">The friendly name component of the full name.</param>
+        /// <returns>The full name of an extension property.</returns>
         public static string BuildExtensionPropertyName(string appId, string friendlyName)
         {
             return String.Format(CultureInfo.InvariantCulture, "extension_{0}_{1}", appId, friendlyName);
