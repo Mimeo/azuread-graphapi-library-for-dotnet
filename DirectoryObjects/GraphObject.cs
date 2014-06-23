@@ -120,6 +120,11 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
 
             foreach (string propertyName in this.ChangedProperties)
             {
+                if (Utils.IsExtensionPropertyName(propertyName))
+                {
+                    continue;
+                }
+
                 if (Utils.GetLinkAttribute(this.GetType(), propertyName) != null)
                 {
                     throw new PropertyValidationException("Link cannot be specified during add / update.");
@@ -144,44 +149,77 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
 
         #region Extension properties support
 
-        protected internal object ExtensionsHost { get; set; }
+        /// <summary>
+        /// The backing store for extension properties.
+        /// </summary>
+        private IDictionary<string, object> extensions = new Dictionary<string, object>();
 
-        private static IDictionary<Type, ExtensionsHostInfo> registeredExtensionsHostInfoMap = new Dictionary<Type, ExtensionsHostInfo>();
-
-        public static ExtensionsHostInfo GetExtensionsHostInfo(Type graphObjectType)
+        /// <summary>
+        /// Gets the value of the extension property identified by the given appId and friendlyName.
+        /// </summary>
+        /// <typeparam name="TValue">The type of the returned value.</typeparam>
+        /// <param name="appId">The application identifier component of the full extension property name.</param>
+        /// <param name="friendlyName">The friendly name component of the full extension property name.</param>
+        /// <returns>The value of the extension property.</returns>
+        public TValue GetExtension<TValue>(string appId, string friendlyName)
         {
-            ExtensionsHostInfo result = null;
-            GraphObject.registeredExtensionsHostInfoMap.TryGetValue(graphObjectType, out result);
+            return (TValue)this.GetExtension(appId, friendlyName);
+        }
+
+        /// <summary>
+        /// Gets the value of the extension property identified by the given appId and friendlyName.
+        /// </summary>
+        /// <param name="appId">The application identifier component of the full extension property name.</param>
+        /// <param name="friendlyName">The friendly name component of the full extension property name.</param>
+        /// <returns>The value of the extension property.</returns>
+        public object GetExtension(string appId, string friendlyName)
+        {
+            return this.GetExtension(Utils.BuildExtensionPropertyName(appId, friendlyName));
+        }
+
+        /// <summary>
+        /// Gets the value of the extension property identified by the given fullName.
+        /// </summary>
+        /// <typeparam name="TValue">The type of the returned value.</typeparam>
+        /// <param name="fullName">The full name of the extension property.</param>
+        /// <returns>The value of the extension property.</returns>
+        public TValue GetExtension<TValue>(string fullName)
+        {
+            return (TValue)this.GetExtension(fullName);
+        }
+
+        /// <summary>
+        /// Gets the value of the extension property identified by the given fullName.
+        /// </summary>
+        /// <param name="fullName">The full name of the extension property.</param>
+        /// <returns>The value of the extension property.</returns>
+        public object GetExtension(string fullName)
+        {
+            object result = null;
+            this.extensions.TryGetValue(fullName, out result);
             return result;
         }
 
-        public static void RegisterExtensions<TGraphObject, TExtensionsHost>()
-            where TGraphObject : GraphObject
-            where TExtensionsHost : class, new()
+        /// <summary>
+        /// Sets the value of the extension property identified by the given appId and friendlyName.
+        /// </summary>
+        /// <param name="appId">The application identifier component of the full extension property name.</param>
+        /// <param name="friendlyName">The friendly name component of the full extension property name.</param>
+        /// <param name="value">The new value of the extension property.</param>
+        public void SetExtension(string appId, string friendlyName, object value)
         {
-            if (GraphObject.registeredExtensionsHostInfoMap.ContainsKey(typeof(TGraphObject)))
-            {
-                throw new InvalidOperationException();
-            }
-
-            GraphObject.registeredExtensionsHostInfoMap[typeof(TGraphObject)] = 
-                new ExtensionsHostInfo(typeof(TExtensionsHost));
+            this.SetExtension(Utils.BuildExtensionPropertyName(appId, friendlyName), value);
         }
 
-        public static void UnregisterExtensions<TGraphObject>()
-            where TGraphObject : GraphObject
+        /// <summary>
+        /// Sets the value of the extension property identified by the given fullName.
+        /// </summary>
+        /// <param name="fullName">The full name of the extension property.</param>
+        /// <param name="value">The new value of the extension property.</param>
+        public void SetExtension(string fullName, object value)
         {
-            GraphObject.registeredExtensionsHostInfoMap.Remove(typeof(TGraphObject));
-        }
-
-        public object GetExtensionProperty(PropertyInfo info)
-        {
-            return info.GetValue(this.ExtensionsHost, null);
-        }
-
-        public void SetExtensionProperty(PropertyInfo info, object value)
-        {
-            info.SetValue(this.ExtensionsHost, value, null);
+            this.extensions[fullName] = value;
+            this.ChangedProperties.Add(fullName);
         }
 
         #endregion

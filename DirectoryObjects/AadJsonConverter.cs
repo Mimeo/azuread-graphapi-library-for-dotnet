@@ -54,6 +54,19 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
             return isGraphObject;
         }
 
+        private object ConvertPropertyValue(JProperty property)
+        {
+            switch (property.Value.Type)
+            {
+                case JTokenType.String:
+                    return property.Value.ToObject<String>();
+                case JTokenType.Bytes:
+                    return property.Value.ToObject<Byte[]>();
+                default:
+                    throw new InvalidOperationException("");
+            }
+        }
+
         /// <summary>
         /// Read JSON string to the object.
         /// </summary>
@@ -129,21 +142,14 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
                 Dictionary<string, PropertyInfo> propertyNameToInfoMap =
                     this.GetPropertyInfosForAadType(odataTypeProperty.Value.ToString(), resultObjectType);
 
-                var extensionsHostInfo = GraphObject.GetExtensionsHostInfo(resultObjectType);
-
-                if (extensionsHostInfo != null)
-                {
-                    graphObject.ExtensionsHost = Activator.CreateInstance(extensionsHostInfo.ExtensionsHostType);
-                }
-
                 foreach (JProperty jsonProperty in jsonProperties)
                 {
                     PropertyInfo propertyInfo;
                     if (!propertyNameToInfoMap.TryGetValue(jsonProperty.Name, out propertyInfo))
                     {
-                        if (extensionsHostInfo != null && IsExtensionProperty(jsonProperty.Name))
+                        if (Utils.IsExtensionPropertyName(jsonProperty.Name))
                         {
-
+                            graphObject.SetExtension(jsonProperty.Name, this.ConvertPropertyValue(jsonProperty));
                         }
                         else
                         {
@@ -154,11 +160,6 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
             }
 
             return graphObject;
-        }
-
-        private bool IsExtensionProperty(string name)
-        {
-            return System.Text.RegularExpressions.Regex.IsMatch(name, "extension_[a-f0-9]+_[a-z][a-z0-9]+");
         }
 
         /// <summary>

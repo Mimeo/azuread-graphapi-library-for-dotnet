@@ -47,13 +47,37 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
                 new Dictionary<string, object>(graphObject.ChangedProperties.Count);
             foreach (string changedProperty in graphObject.ChangedProperties)
             {
-                PropertyInfo propertyInfo = graphObject.GetType().GetProperty(changedProperty);
-                JsonPropertyAttribute jsonPropertyName = 
-                    Utils.GetCustomAttribute<JsonPropertyAttribute>(propertyInfo, true);
-                serializableGraphObject.Add(jsonPropertyName.PropertyName, propertyInfo.GetValue(graphObject, null));
+                string propertyName = null;
+                object propertyValue = null;
+
+                if (Utils.IsExtensionPropertyName(changedProperty))
+                {
+                    propertyName = changedProperty;
+                    propertyValue = graphObject.GetExtension(propertyName);
+                }
+                else
+                {
+                    PropertyInfo propertyInfo = graphObject.GetType().GetProperty(changedProperty);
+                    JsonPropertyAttribute jsonPropertyName =
+                        Utils.GetCustomAttribute<JsonPropertyAttribute>(propertyInfo, true);
+                    propertyName = jsonPropertyName.PropertyName;
+                    propertyValue = propertyInfo.GetValue(graphObject, null);
+                }
+
+                serializableGraphObject.Add(propertyName, propertyValue);
             }
 
             return serializableGraphObject;
+        }
+
+        public static bool IsExtensionPropertyName(string name)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(name, "extension_[a-f0-9]+_[\\w]+");
+        }
+
+        public static string BuildExtensionPropertyName(string appId, string friendlyName)
+        {
+            return String.Format(CultureInfo.InvariantCulture, "extension_{0}_{1}", appId, friendlyName);
         }
 
         /// <summary>
@@ -657,7 +681,7 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
         {
             Utils.ThrowIfNull(sourceType, "sourceType");
 
-            object[] customAttributes = sourceType.GetCustomAttributes(typeof(T), false);
+            object[] customAttributes = sourceType.GetCustomAttributes(typeof(T), true);
 
             if (customAttributes == null || customAttributes.Length != 1)
             {
