@@ -5,8 +5,8 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Linq;
     using System.Collections.Specialized;
+    using System.Linq;
 
     public class ChangeTrackingFiniteSet<T> : ObservableCollection<T>
     {
@@ -29,10 +29,9 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
 
         protected void ValidateItems(IEnumerable<T> items)
         {
-            // The new item(s) must be in the registered domain.
             if (items.Any(item => this.Domain.Contains(item) == false))
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("items", "All items must be in the domain of this set.");
             }
         }
     }

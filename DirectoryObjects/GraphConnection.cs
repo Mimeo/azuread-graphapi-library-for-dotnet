@@ -279,7 +279,7 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
         /// <param name="appId">The value of the appId property on the desired application.</param>
         /// <returns>The application with the given appId.</returns>
         /// <remarks>This is a convenience method. If you already know the objectId of your app, you can
-        /// retrieve it by calling Get<Application>(objectId). </Application></remarks>
+        /// retrieve it by calling Get&lt;Application&gt;(objectId).</remarks>
         public virtual Application GetApplication(string appId)
         {
             var query = String.Format(CultureInfo.InvariantCulture, "appId eq guid'{0}'", appId);

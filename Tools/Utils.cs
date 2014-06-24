@@ -77,7 +77,7 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
         /// <returns>True if the given name matches the pattern for extension property names; false otherwise.</returns>
         public static bool IsExtensionPropertyName(string name)
         {
-            return System.Text.RegularExpressions.Regex.IsMatch(name, "extension_[a-f0-9]+_[\\w]+");
+            return System.Text.RegularExpressions.Regex.IsMatch(name, "extension_[a-f0-9]{32}_[\\w]+");
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Microsoft.Azure.ActiveDirectory.GraphClient
         /// <returns>The full name of an extension property.</returns>
         public static string BuildExtensionPropertyName(string appId, string friendlyName)
         {
-            return String.Format(CultureInfo.InvariantCulture, "extension_{0}_{1}", appId, friendlyName);
+            return String.Format(CultureInfo.InvariantCulture, "extension_{0}_{1}", appId.Replace("-", String.Empty), friendlyName);
         }
 
         /// <summary>
